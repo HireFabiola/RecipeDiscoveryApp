@@ -1,28 +1,38 @@
-import useFetch from "../hooks/useFetch";
-
-const categoriesUrl =
-  "https://www.themealdb.com/api/json/v1/1/categories.php";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function Home() {
-  const { data, loading, error } = useFetch<any>(categoriesUrl);
+  const [testFavorites, setTestFavorites] = useLocalStorage<string[]>(
+    "testFavorites",
+    []
+  );
 
-  if (loading) {
-    return <h2>Loading...</h2>;
+  function handleAddTestFavorite() {
+    setTestFavorites([...testFavorites, "52772"]);
   }
 
-  if (error) {
-    return <h2>Error: {error}</h2>;
+  function handleClearTestFavorites() {
+    setTestFavorites([]);
   }
 
   return (
     <div>
-      <h1>Recipe Categories</h1>
+      <h1>Testing useLocalStorage</h1>
 
-      {data?.categories?.map((category: any) => (
-        <p key={category.idCategory}>
-          {category.strCategory}
-        </p>
-      ))}
+      <p>Favorites saved: {testFavorites.length}</p>
+
+      <button onClick={handleAddTestFavorite}>
+        Add Test Favorite
+      </button>
+
+      <button onClick={handleClearTestFavorites}>
+        Clear Test Favorites
+      </button>
+
+      <ul>
+        {testFavorites.map((id, index) => (
+          <li key={index}>{id}</li>
+        ))}
+      </ul>
     </div>
   );
 }
